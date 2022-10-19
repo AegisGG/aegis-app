@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Logo, HamburgerMenu, Card } from '@components/ui';
 import HeaderDropdown from './HeaderDropdown';
-import Coin from '@assets/icons/Coin.svg';
+import Coin from '@assets/icons/coin.svg';
 
 export default function HeaderMobile() {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);

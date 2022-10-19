@@ -1,6 +1,6 @@
 import { Logo, Button, Card } from '@components/ui';
 import navLinks from '@data/nav-links';
-import Coin from '@assets/icons/Coin.svg';
+import Coin from '@assets/icons/coin.svg';
 
 export default function HeaderDesktop() {
   const linkItems = navLinks.map(item => (
