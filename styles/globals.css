@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply my-0 mx-auto overflow-x-hidden bg-black-900 font-sans text-white;
+  }
+
+  h1 {
+    @apply font-serif text-6xl font-bold text-primary-800;
+  }
+
+  h2 {
+    @apply font-serif text-4xl font-bold leading-tight md:text-5xl;
+  }
+
+  h3 {
+    @apply font-serif text-3xl font-bold;
+  }
+
+  h4 {
+    @apply font-serif text-2xl font-bold;
+  }
+
+  h5 {
+    @apply font-serif text-xl font-bold;
+  }
+
+  h6 {
+    @apply font-serif text-lg font-bold;
+  }
+
+  p {
+    @apply text-base;
+  }
+
+  button {
+    @apply font-serif;
+  }
+
+  a {
+    @apply font-serif;
+  }
+
+  hr {
+    @apply h-px w-auto flex-grow border-none bg-red-50;
+  }
+}
+
+@layer utilities {
+  .clip-card {
+    --edge-size: 6em;
+    clip-path: polygon(0% 0%, 100% 0, 100% calc(90% - 6em), calc(100% - 6em) 100%, 0 100%, 0% 6em);
+  }
+
+  .clip-menu {
+    --edge-size: 2em;
+    clip-path: polygon(
+      var(--edge-size) 0%,
+      100% 0,
+      100% calc(100% - var(--edge-size)),
+      calc(100% - var(--edge-size)) 100%,
+      0 100%,
+      0% var(--edge-size)
+    );
+  }
+}
