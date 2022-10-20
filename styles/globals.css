@@ -48,7 +48,12 @@
   }
 
   hr {
-    @apply h-px w-auto flex-grow border-none bg-red-50;
+    @apply h-px w-auto flex-grow border-none bg-black-400;
+  }
+
+  input {
+    @apply w-full border border-black-400 bg-black-600/70 pl-2
+    outline-0 before:absolute before:top-0 before:left-0 before:-z-[1] before:h-full before:w-full before:bg-white/5 before:backdrop-blur-[1.6px] before:content-[''];
   }
 }
 

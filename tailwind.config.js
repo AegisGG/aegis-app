@@ -10,6 +10,7 @@ module.exports = {
         },
         black: {
           400: '#717171',
+          600: '#3B3333',
           900: '#111111'
         }
       },
@@ -29,8 +30,17 @@ module.exports = {
 
       spacing: {
         15: '3.75rem'
+      },
+
+      screens: {
+        desktop: '1440px'
       }
     }
   },
-  plugins: [require('prettier-plugin-tailwindcss')]
+  plugins: [
+    require('prettier-plugin-tailwindcss'),
+    function ({ addVariant }) {
+      addVariant('not-last', '&:not(:last-child)');
+    }
+  ]
 };
