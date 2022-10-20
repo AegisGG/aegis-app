@@ -12,7 +12,7 @@ export default function Document() {
           rel="stylesheet"
         />
       </Head>
-      <body>
+      <body className="bg-[url('/assets/images/betting-background.jpg')] bg-cover bg-top bg-no-repeat">
         <Main />
         <NextScript />
       </body>
