@@ -10,7 +10,7 @@ interface HeaderDesktopProps {
 export default function HeaderDesktop({ ctx }: HeaderDesktopProps) {
   const { connectWallet, walletData } = ctx;
 
-  const isSignedIn = walletData?.signerAddress.length !== 0;
+  const isSignedIn = walletData?.signerAddress.length !== 0 && walletData !== undefined ? true : false;
 
   const linkItems = navLinks.map(item => (
     <li key={item.name}>

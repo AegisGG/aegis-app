@@ -57,7 +57,7 @@ export default function BettingTeam({ id, className, name, image, result }: Bett
           <Card
             className="flex-1 rounded-full pl-2 before:rounded-full before:bg-black-600/50"
             background="before:bg-black-600/70">
-            {teamData?.[id].odds}
+            {teamData ? teamData?.[id].odds : '0'}
           </Card>
         </div>
 
