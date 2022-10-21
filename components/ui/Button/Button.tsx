@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, MouseEventHandler } from 'react';
 import clsx from 'clsx';
 
 interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
@@ -11,6 +11,7 @@ interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   target?: string;
   rel?: string;
   disabled?: boolean;
+  onClick?: MouseEventHandler;
 }
 
 export default function Button(props: ButtonProps) {

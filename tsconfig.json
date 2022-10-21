@@ -22,9 +22,10 @@
       "@lib/*": ["lib/*"],
       "@data/*": ["data/*"],
       "@hooks/*": ["hooks/*"],
-      "@helpers/*": ["helpers/*"]
+      "@helpers/*": ["helpers/*"],
+      "@context/*": ["context/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "helpers/aegisContract.js"],
   "exclude": ["node_modules"]
 }

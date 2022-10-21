@@ -1,10 +1,14 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
+import { useContext } from 'react';
 import Head from 'next/head';
+import EthersContext from '@context/EthersContext';
 import { Layout } from '@components/common';
 import { BettingLayout, BettingEvent } from '@components/betting';
 
 const Betting: NextPageWithLayout = () => {
+  const { isLoading } = useContext(EthersContext);
+
   const Title = () => (
     <div className="flex items-center justify-center gap-4 px-6 py-4">
       <picture>
@@ -26,7 +30,7 @@ const Betting: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <BettingEvent title={<Title />} />
+      {isLoading ? <div> Loading</div> : <BettingEvent title={<Title />} />}
     </>
   );
 };

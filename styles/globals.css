@@ -55,6 +55,16 @@
     @apply w-full border border-black-400 bg-black-600/70 pl-2
     outline-0 before:absolute before:top-0 before:left-0 before:-z-[1] before:h-full before:w-full before:bg-white/5 before:backdrop-blur-[1.6px] before:content-[''];
   }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
 }
 
 @layer utilities {

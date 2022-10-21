@@ -10,13 +10,10 @@ interface AvatarProps {
 
 export default function Avatar({ src, type, alt, width = 40, height = 40 }: AvatarProps) {
   if (!src) {
-    return <div className={clsx('block h-10 w-10 rounded-full bg-white', `h-[${height}px]`, `w-[${width}px]`)}></div>;
+    return <div className={clsx('block h-12 w-12 rounded-full bg-white')}></div>;
   }
 
   return (
-    <picture>
-      <source srcSet={src} type={type} />
-      <img className="rounded-full" alt={alt} width={width} height={height} />
-    </picture>
+    <div className="h-12 w-12 rounded-full bg-cover bg-top bg-no-repeat" style={{ backgroundImage: `url(${src})` }} />
   );
 }
