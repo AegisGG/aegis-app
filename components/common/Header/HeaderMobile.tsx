@@ -12,6 +12,8 @@ export default function HeaderMobile({ ctx }: HeaderMobileProps) {
   const { connectWallet, walletData } = ctx;
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
 
+  const isSignedIn = walletData?.signerAddress.length !== 0 && walletData !== undefined ? true : false;
+
   const buttonClickHandler = () => {
     connectWallet?.();
   };
@@ -25,7 +27,7 @@ export default function HeaderMobile({ ctx }: HeaderMobileProps) {
           <h6 className="font-normal">Balance</h6>
         </div>
         <Card className="w-24 flex-1 rounded-full py-1 pl-4 before:rounded-full" background="before:bg-black-600/70">
-          <p className="font-serif">{walletData?.signerAddress.length !== 0 ? walletData?.signerBalance : '0.00'}</p>
+          <p className="font-serif">{isSignedIn ? walletData?.signerBalance : '0.00'}</p>
         </Card>
       </div>
       <HamburgerMenu
@@ -33,9 +35,7 @@ export default function HeaderMobile({ ctx }: HeaderMobileProps) {
         opened={isHamburgerOpen}
         onClick={() => setIsHamburgerOpen(prevState => !prevState)}
       />
-      {isHamburgerOpen && (
-        <HeaderDropdown isSignedIn={walletData?.signerAddress.length !== 0} onButtonClick={buttonClickHandler} />
-      )}
+      {isHamburgerOpen && <HeaderDropdown isSignedIn={isSignedIn} onButtonClick={buttonClickHandler} />}
     </div>
   );
 }

@@ -30,7 +30,9 @@ const Betting: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {isLoading ? <div> Loading</div> : <BettingEvent title={<Title />} />}
+      <BettingEvent title={<Title />} />
+
+      {/* {isLoading ? <div> Loading</div> : } */}
     </>
   );
 };

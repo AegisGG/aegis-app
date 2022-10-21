@@ -92,8 +92,6 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
     const chainId = await walletData?.signer?.getChainId?.();
     const convertedAmount = ethers.utils.parseUnits(amount.toString(), 18);
 
-    console.log();
-
     if (chainId != 1) {
       // pop up error if network not ethereum
       // ALERT PLEASE SWITCH TO ETHEREUM NETWORK TO CONTINUE
@@ -134,16 +132,16 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
   useEffect(() => {
     const stickyValue = window.sessionStorage.getItem('user');
 
-    if (walletData === undefined && stickyValue !== undefined) {
+    if (walletData === undefined && stickyValue !== null) {
       connectWallet();
-      console.log('wallet');
+      setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
     if (teamData === undefined && walletData !== undefined) {
-      console.log('team');
       getTeamData();
+      setIsLoading(false);
     }
   }, [teamData, walletData]);
 
