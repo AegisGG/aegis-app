@@ -1,11 +1,11 @@
-import type { ReactNode } from 'react';
+import type { ChangeEvent } from 'react';
 
 interface NumberInputProps {
   className?: string;
   defaultValue?: number;
-  onChange?: () => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function NumberInput({ className, ...others }: NumberInputProps) {
-  return <input defaultValue="0.00" {...others} />;
+  return <input type="number" step="any" defaultValue="0.00" {...others} />;
 }

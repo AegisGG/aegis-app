@@ -1,10 +1,20 @@
+import type { EthersContextProps } from '@context/EthersContext';
 import { useState } from 'react';
 import { Logo, HamburgerMenu, Card } from '@components/ui';
 import HeaderDropdown from './HeaderDropdown';
 import Coin from '@assets/icons/coin.svg';
 
-export default function HeaderMobile() {
+interface HeaderMobileProps {
+  ctx: Partial<EthersContextProps>;
+}
+
+export default function HeaderMobile({ ctx }: HeaderMobileProps) {
+  const { connectWallet, walletData } = ctx;
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+
+  const buttonClickHandler = () => {
+    connectWallet?.();
+  };
 
   return (
     <div className="flex items-center justify-between py-4">
@@ -14,9 +24,8 @@ export default function HeaderMobile() {
           <Coin />
           <h6 className="font-normal">Balance</h6>
         </div>
-        <Card className="w-24 flex-1 rounded-full py-1 pl-4 before:rounded-full">
-          {/* Todo: Fetch Balance */}
-          <p className="font-serif">0.00</p>
+        <Card className="w-24 flex-1 rounded-full py-1 pl-4 before:rounded-full" background="before:bg-black-600/70">
+          <p className="font-serif">{walletData?.signerAddress.length !== 0 ? walletData?.signerBalance : '0.00'}</p>
         </Card>
       </div>
       <HamburgerMenu
@@ -24,7 +33,9 @@ export default function HeaderMobile() {
         opened={isHamburgerOpen}
         onClick={() => setIsHamburgerOpen(prevState => !prevState)}
       />
-      {isHamburgerOpen && <HeaderDropdown />}
+      {isHamburgerOpen && (
+        <HeaderDropdown isSignedIn={walletData?.signerAddress.length !== 0} onButtonClick={buttonClickHandler} />
+      )}
     </div>
   );
 }

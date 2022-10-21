@@ -9,6 +9,8 @@ const nextConfig = {
       use: ['@svgr/webpack']
     });
 
+    config.experiments = { ...config.experiments, ...{ topLevelAwait: true } };
+
     return config;
   },
   async redirects() {

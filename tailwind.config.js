@@ -33,7 +33,7 @@ module.exports = {
       },
 
       screens: {
-        desktop: '1440px'
+        desktop: '1441px'
       }
     }
   },
