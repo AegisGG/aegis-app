@@ -6,7 +6,7 @@ const guideSteps = [
   'There is a 10% fee when participating on Wagers',
   'Press Stake',
   'User can unstake anytime before matches start but will only get 90% of original staked amount due to fees',
-  `Payout and staked tokens are automatically sent winners' wallets`
+  'Press Claim Prize to receive payout.'
 ];
 
 export default guideSteps;
