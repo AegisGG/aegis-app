@@ -25,8 +25,10 @@ export const getStakedBalance = async signerAddress => {
 };
 
 export const getTeamOdds = async () => {
-  const poolAStakedTokens = Number(ethers.utils.formatUnits(await aegisStakingContract.getPoolAStakedTokens()));
-  const poolBStakedTokens = Number(ethers.utils.formatUnits(await aegisStakingContract.getPoolBStakedTokens()));
+  const aTokens = await aegisStakingContract.getPoolAStakedTokens();
+  const poolAStakedTokens = ethers.utils.formatUnits(aTokens);
+  const bTokens = await aegisStakingContract.getPoolBStakedTokens();
+  const poolBStakedTokens = ethers.utils.formatUnits(bTokens);
 
   const teamAOdds = Number((poolBStakedTokens / poolAStakedTokens + 1).toFixed(2));
   const teamBOdds = Number((poolAStakedTokens / poolBStakedTokens + 1).toFixed(2));

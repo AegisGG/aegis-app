@@ -92,9 +92,8 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
   };
 
   const enableStaking = async () => {
-    await walletData?.provider?.send?.('eth_requestAccounts', []);
-
-    const chainId = await walletData?.signer.getChainId?.();
+    const provider = await walletData?.provider?.send?.('eth_requestAccounts', []);
+    const chainId = await walletData?.signer?.getChainId?.();
 
     if (chainId != 1) {
       setError({ code: 2314, title: 'Network Error', message: 'Please switch to ethereum network to continue' });
@@ -106,8 +105,7 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
   };
 
   const stakeTeam = async (poolId: number, amount: number) => {
-    await walletData?.provider?.send?.('eth_requestAccounts', []);
-
+    const provider = await walletData?.provider?.send?.('eth_requestAccounts', []);
     const chainId = await walletData?.signer?.getChainId?.();
     const convertedAmount = ethers.utils.parseUnits(amount.toString(), 18);
 
@@ -119,8 +117,7 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
   };
 
   const unstakeTeam = async (poolId: number, amount: number) => {
-    await walletData?.provider?.send?.('eth_requestAccounts', []);
-
+    const provider = await walletData?.provider?.send?.('eth_requestAccounts', []);
     const chainId = await walletData?.signer?.getChainId?.();
     const convertedAmount = ethers.utils.parseUnits(amount.toString(), 18);
 
@@ -173,20 +170,18 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
   useEffect(() => {
     const stickyValue = window.sessionStorage.getItem('user');
 
-    setIsLoading(true);
-
     if (walletData === undefined && stickyValue !== null) {
+      setIsLoading(true);
       connectWallet();
     }
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
-
     if (teamData === undefined && walletData !== undefined) {
+      setIsLoading(true);
       getTeamData();
     }
-  }, [teamData]);
+  }, [teamData, walletData]);
 
   useEffect(() => {
     if (isLoading && walletData === undefined && teamData === undefined) {
