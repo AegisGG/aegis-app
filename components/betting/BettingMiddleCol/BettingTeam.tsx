@@ -44,7 +44,7 @@ export default function BettingTeam({ id, className, data }: BettingTeamProps) {
     <div className={clsx(className)}>
       <div className="mb-8 flex flex-col gap-4 desktop:grid desktop:grid-cols-10 desktop:items-start desktop:gap-6">
         <div className="flex items-center gap-2 desktop:col-span-3">
-          <Avatar {...(data && { src: data.image, alt: `${data.name} team logo` })} />
+          {data.image && <Avatar {...(data && { src: data.image, alt: `${data.name} team logo` })} />}
           <p>{data ? data.name : 'Team 1'}</p>
         </div>
 
