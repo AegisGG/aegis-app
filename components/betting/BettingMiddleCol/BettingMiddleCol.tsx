@@ -40,8 +40,8 @@ export default function BettingMiddleCol({ data }: BettingMiddleColProps) {
           <>
             <div className="relative px-6 py-6 desktop:grid desktop:grid-cols-10 desktop:gap-6">
               <div className="desktop:col-span-3">
-                <h6 className="mb-2">Type:</h6>
-                <h6>Time:</h6>
+                <h6 className="mb-2">{`Type: ${data.type}`}</h6>
+                <h6>{`Time: ${data.time}`}</h6>
               </div>
               {isDesktop && <h6 className="self-end desktop:col-span-1">Result</h6>}
               {isDesktop && <h6 className="self-end desktop:col-span-1">Odds</h6>}
@@ -50,8 +50,8 @@ export default function BettingMiddleCol({ data }: BettingMiddleColProps) {
             </div>
             <hr className="mb-4" />
             <div className="flex flex-col gap-8 py-6 px-6">
-              <BettingTeam id="1" data={data?.['team-1']} />
-              <BettingTeam id="2" data={data?.['team-2']} />
+              <BettingTeam id="a" data={data?.['team-1']} />
+              <BettingTeam id="b" data={data?.['team-2']} />
             </div>
           </>
         ) : (

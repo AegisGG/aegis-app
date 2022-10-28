@@ -31,6 +31,8 @@ export default function AdminDashboardForm({ data, selectedGame }: AdminDashboar
     const newData = {
       event: data.eventName,
       image: data.eventLogo,
+      type: data.eventType,
+      time: data.eventTime,
       ['team-1']: {
         name: data.team1Name,
         image: data.team1Image,
@@ -58,6 +60,8 @@ export default function AdminDashboardForm({ data, selectedGame }: AdminDashboar
   useEffect(() => {
     if (data) {
       setValue('eventName', data?.event ?? '');
+      setValue('eventType', data?.type ?? '');
+      setValue('eventTime', data?.time ?? '');
       setValue('eventLogo', data?.image ?? '');
       setValue('team1Name', data['team-1'].name ?? '');
       setValue('team1Image', data['team-1'].image ?? '');
@@ -89,7 +93,7 @@ export default function AdminDashboardForm({ data, selectedGame }: AdminDashboar
       <form className="flex flex-col gap-12 desktop:grid desktop:grid-cols-8" onSubmit={handleSubmit(onSubmit)}>
         <fieldset className="flex flex-col gap-6 desktop:col-span-8">
           <div>
-            <label className="mb-2 block" htmlFor="email">
+            <label className="mb-2 block" htmlFor="eventName">
               Event Name
             </label>
             <input
@@ -104,7 +108,33 @@ export default function AdminDashboardForm({ data, selectedGame }: AdminDashboar
           </div>
 
           <div>
-            <label className="mb-2 block" htmlFor="email">
+            <label className="mb-2 block" htmlFor="eventTime">
+              Event Time
+            </label>
+            <input
+              id="eventTime"
+              className="h-8"
+              type="text"
+              aria-label="event time input"
+              {...register('eventTime')}
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block" htmlFor="eventType">
+              Event Type
+            </label>
+            <input
+              id="eventType"
+              className="h-8"
+              type="text"
+              aria-label="event type input"
+              {...register('eventType')}
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block" htmlFor="eventLogo">
               Event Logo
             </label>
             <input
@@ -120,7 +150,7 @@ export default function AdminDashboardForm({ data, selectedGame }: AdminDashboar
         <fieldset className="flex flex-col gap-6 desktop:col-span-4">
           <legend className="mb-4 font-serif text-2xl">Team 1</legend>
           <div>
-            <label className="mb-2 block" htmlFor="email">
+            <label className="mb-2 block" htmlFor="team1Name">
               Name
             </label>
             <input
@@ -135,7 +165,7 @@ export default function AdminDashboardForm({ data, selectedGame }: AdminDashboar
           </div>
 
           <div>
-            <label className="mb-2 block" htmlFor="email">
+            <label className="mb-2 block" htmlFor="team1Image">
               Logo
             </label>
             <input
@@ -148,7 +178,7 @@ export default function AdminDashboardForm({ data, selectedGame }: AdminDashboar
           </div>
 
           <div>
-            <label className="mb-2 block" htmlFor="email">
+            <label className="mb-2 block" htmlFor="team1Result">
               Result
             </label>
             <input
@@ -166,7 +196,7 @@ export default function AdminDashboardForm({ data, selectedGame }: AdminDashboar
         <fieldset className="flex flex-col gap-6 desktop:col-span-4">
           <legend className="mb-4 font-serif text-2xl">Team 2</legend>
           <div>
-            <label className="mb-2 block" htmlFor="email">
+            <label className="mb-2 block" htmlFor="team2Name">
               Name
             </label>
             <input
@@ -181,7 +211,7 @@ export default function AdminDashboardForm({ data, selectedGame }: AdminDashboar
           </div>
 
           <div>
-            <label className="mb-2 block" htmlFor="email">
+            <label className="mb-2 block" htmlFor="team2Image">
               Logo
             </label>
             <input
@@ -194,7 +224,7 @@ export default function AdminDashboardForm({ data, selectedGame }: AdminDashboar
           </div>
 
           <div>
-            <label className="mb-2 block" htmlFor="email">
+            <label className="mb-2 block" htmlFor="team2Result">
               Result
             </label>
             <input
