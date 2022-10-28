@@ -1,15 +1,17 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
+import { GameData } from 'types';
+import { useContext } from 'react';
+import EthersContext from '@context/EthersContext';
+import { lolDbRef } from '@helpers/firebaseConfig';
+import { useDatabaseValue } from '@react-query-firebase/database';
 import Head from 'next/head';
 import { Layout } from '@components/common';
-import { BettingLayout, BettingEvent } from '@components/betting';
+import { BettingLayout, BettingMiddleCol } from '@components/betting';
 
 const Lol: NextPageWithLayout = () => {
-  const Title = () => (
-    <div className="flex items-center justify-center gap-4 px-6 py-4">
-      <h4 className="font-normal">Worlds 2022</h4>
-    </div>
-  );
+  const { isLoading: walletIsLoading } = useContext(EthersContext);
+  const { data, isLoading } = useDatabaseValue<GameData>(['products', 'lol'], lolDbRef);
 
   return (
     <>
@@ -22,7 +24,7 @@ const Lol: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <BettingEvent title={<Title />} />
+      {walletIsLoading || isLoading ? <div>Loading...</div> : <BettingMiddleCol data={data!} />}
     </>
   );
 };

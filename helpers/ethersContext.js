@@ -1,6 +1,20 @@
 import { ethers } from 'ethers';
+import aegisStakingAbi from '@data/aegisStakingAbi.json';
+import aegisTokenAbi from '@data/aegisTokenAbi.json';
 
-export const getStakedBalance = async (aegisStakingContract, signerAddress) => {
+const ethProvider = new ethers.providers.getDefaultProvider('https://eth-mainnet.public.blastapi.io');
+
+export const aegisStakingCA = '0xE7d9747404532A1AEFd1Bf9D878aF1E859a51544';
+export const aegisTokenCA = '0x3e4c87bf57d48935d1643A7b8a3383B928B040de';
+const aegisStakingContract = new ethers.Contract(aegisStakingCA, aegisStakingAbi, ethProvider);
+const aegisTokenContract = new ethers.Contract(aegisTokenCA, aegisTokenAbi, ethProvider);
+
+export const getAccountBalance = async address => {
+  const userBalance = await aegisTokenContract.balanceOf(address);
+  return ethers.utils.formatUnits(userBalance);
+};
+
+export const getStakedBalance = async signerAddress => {
   const teamAStakedBalance = await aegisStakingContract.getUserStakedTokens(signerAddress, 0);
   const teamBStakedBalance = await aegisStakingContract.getUserStakedTokens(signerAddress, 1);
 
@@ -10,7 +24,7 @@ export const getStakedBalance = async (aegisStakingContract, signerAddress) => {
   return { teamABalance: formattedteamABalance, teamBBalance: formattedteamBBalance };
 };
 
-export const getTeamOdds = async aegisStakingContract => {
+export const getTeamOdds = async () => {
   const poolAStakedTokens = Number(ethers.utils.formatUnits(await aegisStakingContract.getPoolAStakedTokens()));
   const poolBStakedTokens = Number(ethers.utils.formatUnits(await aegisStakingContract.getPoolBStakedTokens()));
 

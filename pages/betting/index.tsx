@@ -1,23 +1,17 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
+import { GameData } from 'types';
 import { useContext } from 'react';
-import Head from 'next/head';
 import EthersContext from '@context/EthersContext';
+import { dotaDbRef } from '@helpers/firebaseConfig';
+import { useDatabaseValue } from '@react-query-firebase/database';
+import Head from 'next/head';
 import { Layout } from '@components/common';
-import { BettingLayout, BettingEvent } from '@components/betting';
+import { BettingLayout, BettingMiddleCol } from '@components/betting';
 
 const Betting: NextPageWithLayout = () => {
-  const { isLoading } = useContext(EthersContext);
-
-  const Title = () => (
-    <div className="flex items-center justify-center gap-4 px-6 py-4">
-      <picture>
-        <source srcSet="/assets/images/dota.png" type="image/png" />
-        <img src="/assets/images/dota.png" alt="Landscape picture" />
-      </picture>
-      <h4 className="font-normal">The International 2022: Singapore</h4>
-    </div>
-  );
+  const { isLoading: walletIsLoading } = useContext(EthersContext);
+  const { data, isLoading } = useDatabaseValue<GameData>(['products', 'dota'], dotaDbRef);
 
   return (
     <>
@@ -30,9 +24,7 @@ const Betting: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <BettingEvent title={<Title />} />
-
-      {/* {isLoading ? <div> Loading</div> : } */}
+      {walletIsLoading || isLoading ? <div>Loading...</div> : <BettingMiddleCol data={data!} />}
     </>
   );
 };

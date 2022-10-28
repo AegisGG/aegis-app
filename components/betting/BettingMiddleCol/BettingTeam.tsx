@@ -1,4 +1,5 @@
 import type { ChangeEvent } from 'react';
+import { TeamData } from 'types';
 import { useContext, useState } from 'react';
 import clsx from 'clsx';
 import EthersContext from '@context/EthersContext';
@@ -8,20 +9,22 @@ import useMediaQuery from '@hooks/useMediaQuery';
 interface BettingTeamProps {
   id: string;
   className?: string;
-  name?: string;
-  image?: string;
-  result?: number;
+  data: TeamData;
 }
 
-/* Todo: {data}: BettingEventProp */
-export default function BettingTeam({ id, className, name, image, result }: BettingTeamProps) {
+export default function BettingTeam({ id, className, data }: BettingTeamProps) {
   const [wagerAmount, setWagerAmount] = useState(0);
-  const { stakeTeam, enableStaking, teamData, claimPrize } = useContext(EthersContext);
+  const { stakeTeam, unstakeTeam, enableStaking, teamData, claimPrize } = useContext(EthersContext);
   const isMobile = useMediaQuery('(max-width: 1441px)', false);
 
+  const poolId = id === 'a' ? 0 : 1;
+
   const stakeHandler = () => {
-    const poolId = id === 'a' ? 0 : 1;
     stakeTeam?.(poolId, wagerAmount);
+  };
+
+  const unstakeHandler = () => {
+    unstakeTeam?.(poolId, wagerAmount);
   };
 
   const enableHandler = () => {
@@ -41,14 +44,14 @@ export default function BettingTeam({ id, className, name, image, result }: Bett
     <div className={clsx(className)}>
       <div className="mb-8 flex flex-col gap-4 desktop:grid desktop:grid-cols-10 desktop:items-start desktop:gap-6">
         <div className="flex items-center gap-2 desktop:col-span-3">
-          <Avatar src={image} />
-          <p>{name ? name : 'Team 1'}</p>
+          <Avatar {...(data && { src: data.image, alt: `${data.name} team logo` })} />
+          <p>{data ? data.name : 'Team 1'}</p>
         </div>
 
         <div className="flex justify-between gap-4 desktop:col-span-1">
           {isMobile && <h6 className="w-[80px]">Result</h6>}
           <Card className="flex-1 rounded-full pl-2 before:rounded-full" background="before:bg-black-600/70">
-            {result ? result : 0}
+            {data ? data.result : 0}
           </Card>
         </div>
 
@@ -88,7 +91,9 @@ export default function BettingTeam({ id, className, name, image, result }: Bett
                 Stake
               </Card>
             </button>
-            <button className="w-full bg-gradient-to-b from-primary-800 to-primary-900 desktop:col-span-2">
+            <button
+              className="w-full bg-gradient-to-b from-primary-800 to-primary-900 desktop:col-span-2"
+              onClick={unstakeHandler}>
               <Card className="border-none py-1 desktop:text-sm" background="before:bg-black-600/70">
                 Unstake
               </Card>
