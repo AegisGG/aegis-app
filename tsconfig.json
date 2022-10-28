@@ -19,13 +19,12 @@
       "@utils/*": ["utils/*"],
       "@components/*": ["components/*"],
       "@assets/*": ["public/assets/*"],
-      "@lib/*": ["lib/*"],
       "@data/*": ["data/*"],
       "@hooks/*": ["hooks/*"],
       "@helpers/*": ["helpers/*"],
       "@context/*": ["context/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "helpers/aegisContract.js"],
+  "include": ["next-env.d.ts", "**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
   "exclude": ["node_modules"]
 }

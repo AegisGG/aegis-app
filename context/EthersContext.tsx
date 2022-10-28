@@ -1,8 +1,15 @@
-import { ReactNode, useEffect, useState } from 'react';
+import type { Dispatch, SetStateAction, ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { createContext } from 'react';
 import { ethers } from 'ethers';
-import { aegisStakingCA, aegisTokenCA, aegisStakingContract, aegisTokenContract } from '@helpers/aegisContract';
-import { getStakedBalance, getTeamOdds, getPotentialWinnings } from '@helpers/ethersContextHelper';
+import {
+  aegisStakingCA,
+  aegisTokenCA,
+  getAccountBalance,
+  getStakedBalance,
+  getTeamOdds,
+  getPotentialWinnings
+} from '@helpers/ethersContext';
 import aegisStakingAbi from '@data/aegisStakingAbi.json';
 import aegisTokenAbi from '@data/aegisTokenAbi.json';
 
@@ -21,13 +28,28 @@ interface TeamDataProps {
   };
 }
 
+interface Error {
+  name?: string;
+  message?: string;
+  stack?: string;
+}
+
+interface EthersError extends Error {
+  code?: number | string;
+  title?: string;
+  message?: string;
+}
+
 export interface EthersContextProps {
   walletData: WalletDataProps;
   teamData: TeamDataProps;
   isLoading: boolean;
+  error: EthersError | null;
+  setError: Dispatch<SetStateAction<EthersError | null>>;
   connectWallet: () => void;
   enableStaking: () => void;
   stakeTeam: (poolId: number, amount: number) => void;
+  unstakeTeam: (poolId: number, amount: number) => void;
   claimPrize: () => void;
   getStakedBalance: () => void;
   getTeamOdds: () => void;
@@ -44,10 +66,7 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
   const [walletData, setWalletData] = useState<WalletDataProps>();
   const [teamData, setTeamData] = useState<TeamDataProps>();
   const [isLoading, setIsLoading] = useState(true);
-
-  const getAccountBalance = async (address: string) => {
-    return ethers.utils.formatUnits(await aegisTokenContract.balanceOf(address));
-  };
+  const [error, setError] = useState<EthersError | null>(null);
 
   const connectWallet = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
@@ -55,7 +74,6 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
     const signer = provider.getSigner();
     const signerAddress = await signer.getAddress();
     const signerBalance = await getAccountBalance(signerAddress);
-
     const aegisTokenInteractionContract = new ethers.Contract(aegisTokenCA, aegisTokenAbi, signer);
     const aegisStakingInteractionContract = new ethers.Contract(aegisStakingCA, aegisStakingAbi, signer);
 
@@ -69,6 +87,8 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
       aegisTokenInteractionContract,
       aegisStakingInteractionContract
     });
+
+    setIsLoading(false);
   };
 
   const enableStaking = async () => {
@@ -77,8 +97,7 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
     const chainId = await walletData?.signer.getChainId?.();
 
     if (chainId != 1) {
-      // pop up error if network not ethereum
-      // ALERT PLEASE SWITCH TO ETHEREUM NETWORK TO CONTINUE
+      setError({ code: 2314, title: 'Network Error', message: 'Please switch to ethereum network to continue' });
     } else {
       const spenderAddress = aegisStakingCA;
       const amount = '9999999999999999999999999999';
@@ -93,21 +112,41 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
     const convertedAmount = ethers.utils.parseUnits(amount.toString(), 18);
 
     if (chainId != 1) {
-      // pop up error if network not ethereum
-      // ALERT PLEASE SWITCH TO ETHEREUM NETWORK TO CONTINUE
+      setError({ code: 2314, title: 'Network Error', message: 'Please switch to ethereum network to continue' });
     } else {
       walletData?.aegisStakingInteractionContract.stake(poolId, convertedAmount);
     }
   };
 
-  const claimPrize = async () => {
+  const unstakeTeam = async (poolId: number, amount: number) => {
     await walletData?.provider?.send?.('eth_requestAccounts', []);
-    walletData?.aegisStakingInteractionContract.claimPrize();
+
+    const chainId = await walletData?.signer?.getChainId?.();
+    const convertedAmount = ethers.utils.parseUnits(amount.toString(), 18);
+
+    if (chainId != 1) {
+      setError({ code: 2314, title: 'Network Error', message: 'Please switch to ethereum network to continue' });
+    } else {
+      walletData?.aegisStakingInteractionContract.unstake(poolId, convertedAmount);
+    }
+  };
+
+  const claimPrize = async () => {
+    try {
+      await walletData?.provider?.send?.('eth_requestAccounts', []);
+      walletData?.aegisStakingInteractionContract.claimPrize();
+    } catch (error) {
+      // Todo: Set Error State
+      // const ethersError = error as EthersError;
+      // if (ethersError.code === -32603) {
+      //   console.log('Error');
+      // }
+    }
   };
 
   const getTeamData = async () => {
-    const { teamABalance, teamBBalance } = await getStakedBalance(aegisStakingContract, walletData?.signerAddress);
-    const { teamAOdds, teamBOdds } = await getTeamOdds(aegisStakingContract);
+    const { teamABalance, teamBBalance } = await getStakedBalance(walletData?.signerAddress);
+    const { teamAOdds, teamBOdds } = await getTeamOdds();
     const { teamAPotentialWinning, teamBPotentialWinning } = getPotentialWinnings({
       teamABalance,
       teamAOdds,
@@ -127,26 +166,30 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
         potentialWinning: teamBPotentialWinning
       }
     });
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
     const stickyValue = window.sessionStorage.getItem('user');
 
+    setIsLoading(true);
+
     if (walletData === undefined && stickyValue !== null) {
       connectWallet();
-      setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
+
     if (teamData === undefined && walletData !== undefined) {
       getTeamData();
-      setIsLoading(false);
     }
-  }, [teamData, walletData]);
+  }, [teamData]);
 
   useEffect(() => {
-    if (isLoading && walletData !== undefined && teamData !== undefined) {
+    if (isLoading && walletData === undefined && teamData === undefined) {
       setIsLoading(false);
     }
   }, [isLoading, walletData, teamData]);
@@ -157,9 +200,12 @@ export const EthersContextProvider = ({ children }: EthersContextProviderProps) 
         walletData,
         teamData,
         isLoading,
+        error,
+        setError,
         connectWallet,
         enableStaking,
         stakeTeam,
+        unstakeTeam,
         claimPrize,
         getStakedBalance,
         getTeamOdds,

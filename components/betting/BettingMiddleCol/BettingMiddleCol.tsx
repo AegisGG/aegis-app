@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import { GameData } from 'types';
 import { useContext } from 'react';
 import EthersContext from '@context/EthersContext';
 import { Card } from '@components/ui';
@@ -6,10 +6,10 @@ import BettingTeam from './BettingTeam';
 import useMediaQuery from '@hooks/useMediaQuery';
 
 interface BettingMiddleColProps {
-  title?: ReactElement;
+  data: GameData;
 }
 
-export default function BettingMiddleCol({ title }: BettingMiddleColProps) {
+export default function BettingMiddleCol({ data }: BettingMiddleColProps) {
   const { walletData } = useContext(EthersContext);
   const isDesktop = useMediaQuery('(min-width: 1441px)', false);
 
@@ -21,7 +21,19 @@ export default function BettingMiddleCol({ title }: BettingMiddleColProps) {
         <div className="bg:left h-full w-full bg-[url('/assets/images/betting-banner.png')] bg-cover bg-no-repeat lg:bg-center" />
       </Card>
 
-      <Card withFrame>{title}</Card>
+      <Card className="border-primary-900" withFrame>
+        <div className="flex items-center justify-center gap-4 px-6 py-4">
+          {data.image && (
+            <picture>
+              <source type="image/png" {...(data && { srcSet: `${data.image}` })} />
+              <img alt="event logo" {...(data && { src: `${data.image}` })} />
+            </picture>
+          )}
+          <h4 className="font-normal">
+            <>{data ? data.event : ''}</>
+          </h4>
+        </div>
+      </Card>
 
       <Card withFrame>
         {isSignedIn ? (
@@ -38,18 +50,8 @@ export default function BettingMiddleCol({ title }: BettingMiddleColProps) {
             </div>
             <hr className="mb-4" />
             <div className="flex flex-col gap-8 py-6 px-6">
-              <BettingTeam
-                id="a"
-                image="https://f004.backblazeb2.com/file/website-business/hero.jpg"
-                name="Dota Team 1"
-                result={0}
-              />
-              <BettingTeam
-                id="b"
-                image="https://f004.backblazeb2.com/file/website-business/hero.jpg"
-                name="Dota Team 2"
-                result={1}
-              />
+              <BettingTeam id="1" data={data?.['team-1']} />
+              <BettingTeam id="2" data={data?.['team-2']} />
             </div>
           </>
         ) : (

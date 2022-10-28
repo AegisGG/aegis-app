@@ -11,13 +11,7 @@ interface CardProps {
 
 export default function Card({ children, className, background, withFrame = false }: CardProps) {
   return (
-    <div
-      className={clsx(
-        className,
-        "relative border border-black-400 before:absolute before:top-0 before:left-0 before:-z-[1] before:h-full before:w-full before:backdrop-blur-[1.6px] before:content-['']",
-        { 'before:bg-white/5': background === undefined },
-        background
-      )}>
+    <div className={clsx('card', { 'before:bg-white/5': background === undefined }, className, background)}>
       {withFrame && <CardFrame className="absolute top-5 right-5" />}
       {children}
     </div>

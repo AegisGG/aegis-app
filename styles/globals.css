@@ -65,6 +65,14 @@
   input[type='number'] {
     -moz-appearance: textfield;
   }
+
+  .card {
+    @apply relative border border-black-400 before:absolute before:top-0 before:left-0 before:-z-[1] before:h-full before:w-full before:backdrop-blur-[1.6px] before:content-[''];
+  }
+
+  .modal {
+    @apply clip-menu bg-white p-10 text-primary-900;
+  }
 }
 
 @layer utilities {
